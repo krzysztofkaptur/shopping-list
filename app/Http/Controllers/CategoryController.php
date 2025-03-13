@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
     public function index() {
-      return view('categories.index', ['categories' => Category::orderBy('created_at', 'desc')->paginate(10)]);
+      return view('categories.index', ['categories' => Category::where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10)]);
     }
 
     public function create() {
@@ -20,7 +21,10 @@ class CategoryController extends Controller
         "name" => "required|string|min:1|max:50"
       ]);
 
-      Category::create($validated);
+      Category::create([
+        "name" => $validated['name'],
+        "user_id" => Auth::id(),
+      ]);
 
       return redirect()->route('categories.index');
     }

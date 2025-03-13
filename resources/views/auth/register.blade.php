@@ -11,4 +11,7 @@
   </form>
 
   <p>Already have an account? <a href="{{ route('login.show') }}">Sign in</a></p>
+  <hr>
+  <p>or login with:</p>
+  <a href="{{ route('auth.github') }}">Github</a>
 </x-layouts.auth>

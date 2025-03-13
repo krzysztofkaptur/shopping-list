@@ -5,23 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
     public function index() {
-      $items = Item::with('category')->orderBy('created_at', 'desc')->paginate(10);
+      $items = Item::with('category')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
 
       return view('items.index', ["items" => $items]);
     }
 
     public function show(int $id) {
-      $categories = Category::all();
+      $categories = Category::all()->where('user_id', Auth::id());
 
       return view('items.show', ["item" => Item::find($id), 'categories' => $categories]);
     }
 
     public function create() {
-      $categories = Category::all();
+      $categories = Category::all()->where('user_id', Auth::id());
 
       return view('items.create', ['categories' => $categories]);
     }
@@ -35,7 +36,8 @@ class ItemController extends Controller
       Item::create([
         'name' => $request->name,
         'completed' => $request->completed == 'on' ? 1 : 0,
-        'category_id' => $request->category_id
+        'category_id' => $request->category_id,
+        'user_id' => Auth::id(),
       ]);
 
       return redirect()->route('items.index');
