@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex gap-4 items-center">
-      <span>{{ Auth::user()->email }}</span>
+      <a href="{{ route('profile.index') }}">{{ Auth::user()->email }}</a>
       <form action="{{ route('logout') }}" method="POST">
         @csrf
         

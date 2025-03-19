@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->controller(AuthController::class)->group(function () {
@@ -25,6 +26,10 @@ Route::middleware('auth')->controller(CategoryController::class)->prefix('/categ
   Route::get('/{id}', 'show')->name('categories.show');
   Route::delete('/{category}', 'destroy')->name('categories.destroy');
   Route::patch('/{category}', 'update')->name('categories.update');
+});
+
+Route::middleware('auth')->controller(ProfileController::class)->prefix('/profile')->group(function () {
+  Route::get('/', 'index')->name('profile.index');
 });
 
 Route::middleware('auth')->controller(ItemController::class)->group(function () {
